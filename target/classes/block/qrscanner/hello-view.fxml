@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane stylesheets="@styles.css" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="block.qrscanner.QRScannerController">
+    <children>
+        <!-- Main Content VBox -->
+        <VBox alignment="TOP_CENTER" spacing="20.0">
+            <padding>
+                <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+            </padding>
+            <children>
+                <Label styleClass="title-label" text="QR Code Scanner" />
+                <Label fx:id="statusLabel" styleClass="status-label" text="Initialize camera or select a file to begin." />
+                <ImageView fx:id="cameraView" fitHeight="400.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
+
+                <!-- Result Pane (Initially Hidden) -->
+                <VBox fx:id="resultPane" alignment="TOP_CENTER" managed="false" spacing="15.0" styleClass="result-pane" visible="false">
+                    <padding>
+                        <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
+                    </padding>
+                    <children>
+                        <Label styleClass="result-title" text="QR Code Detected" />
+                        <TextArea fx:id="resultTextArea" editable="false" prefHeight="100.0" styleClass="text-area" wrapText="true" />
+                        <HBox fx:id="actionButtonsBox" alignment="CENTER" spacing="15.0" />
+                    </children>
+                </VBox>
+
+                <!-- Control Buttons -->
+                <HBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <Button fx:id="scanButton" onAction="#onScanButtonClick" styleClass="scan-button" text="Start Camera" />
+                        <Button onAction="#onScanFromFileClick" styleClass="scan-button" text="Scan From File" />
+                    </children>
+                    <padding>
+                        <Insets top="10.0" />
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+
+        <!-- No Camera Found Overlay (Initially Hidden) -->
+        <VBox fx:id="noCameraPane" alignment="CENTER" managed="false" spacing="15.0" styleClass="no-camera-pane" visible="false">
+            <children>
+                <Label styleClass="no-camera-text" text="Webcam Not Found" />
+                <Label styleClass="no-camera-subtext" text="Could not detect a camera. Please ensure it's connected and drivers are installed. You can still scan from a file." />
+            </children>
+            <StackPane.margin>
+                <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
+            </StackPane.margin>
+        </VBox>
+    </children>
+</StackPane>
+
