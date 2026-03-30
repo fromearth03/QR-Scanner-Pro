@@ -94,46 +94,6 @@ Main class:
 ./mvnw javafx:run
 ```
 
----
-
-## IDE Setup (Important)
-
-If you get `module not found` errors in IDE:
-
-1. Reimport Maven project
-2. Set Project SDK to **JDK 17+**
-3. Run using **Maven goal** `javafx:run` (not plain "Run class")
-
----
-
-## Troubleshooting
-
-### 1) `java: module not found: javafx.controls` (and similar)
-
-Cause: class run config is not using Maven module path.
-
-Fix:
-
-```bash
-./mvnw clean compile
-./mvnw javafx:run
-```
-
-### 2) `release version 21/17 not supported`
-
-Cause: JRE or incomplete Java installation.
-
-Fix:
-- Install a full JDK
-- Confirm `javac -version` works
-- Reopen terminal/IDE and rebuild
-
-### 3) Linux webcam / GTK warnings
-
-Some systems print webcam GTK/GDK warnings. If app still opens and scans, it is usually non-fatal.
-
----
-
 ## Project Structure
 
 ```text
@@ -150,8 +110,3 @@ src/
 				styles.css
 ```
 
----
-
-## License
-
-This project currently has no explicit license file. Add one if you plan to distribute it publicly.
