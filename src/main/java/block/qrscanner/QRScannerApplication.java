@@ -19,6 +19,7 @@ public class QRScannerApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(QRScannerApplication.class.getResource("hello-view.fxml"));
         Parent root = fxmlLoader.load();
         controller = fxmlLoader.getController();
+        controller.setHostServices(getHostServices());
 
         Scene scene = new Scene(root);
         stage.setTitle("QR Scanner Pro");

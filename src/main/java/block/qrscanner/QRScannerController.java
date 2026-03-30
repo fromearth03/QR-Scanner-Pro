@@ -10,6 +10,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
@@ -26,6 +27,7 @@ import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
 import java.awt.Desktop;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +51,11 @@ public class QRScannerController {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final SimpleBooleanProperty isCameraActive = new SimpleBooleanProperty(false);
     private String lastQRCode = "";
+    private HostServices hostServices;
+
+    void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
 
     @FXML
     public void initialize() {
@@ -168,13 +175,7 @@ public class QRScannerController {
         if (isValidURL(text)) {
             Button openButton = new Button("Open Link");
             openButton.getStyleClass().add("action-button");
-            openButton.setOnAction(e -> {
-                try {
-                    Desktop.getDesktop().browse(new URI(text));
-                } catch (IOException | URISyntaxException ex) {
-                    ex.printStackTrace();
-                }
-            });
+            openButton.setOnAction(e -> openUrl(text));
             actionButtonsBox.getChildren().add(openButton);
         }
 
@@ -225,6 +226,31 @@ public class QRScannerController {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    private void openUrl(String url) {
+        try {
+            URI uri = new URI(url);
+            if (hostServices != null) {
+                hostServices.showDocument(uri.toString());
+                statusLabel.setText("Opened link in browser.");
+                return;
+            }
+
+            if (!GraphicsEnvironment.isHeadless()
+                    && Desktop.isDesktopSupported()
+                    && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(uri);
+                statusLabel.setText("Opened link in browser.");
+                return;
+            }
+
+            statusLabel.setText("Cannot open browser on this system.");
+        } catch (URISyntaxException ex) {
+            statusLabel.setText("Invalid URL format.");
+        } catch (Exception ex) {
+            statusLabel.setText("Failed to open link.");
         }
     }
 
